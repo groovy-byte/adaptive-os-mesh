@@ -1,0 +1,51 @@
+#version 450
+
+layout(local_size_x = 32) in;
+
+struct BlockQ2K {
+    float d;
+    float dmin;
+    uint qs[16];
+};
+
+layout(std430, binding = 0) buffer InputBuffer {
+    BlockQ2K blocks[];
+} in_data;
+
+layout(std430, binding = 1) buffer OutputBuffer {
+    vec4 values[];
+} out_data;
+
+void main() {
+    uint block_idx = gl_WorkGroupID.x;
+    uint tid = gl_LocalInvocationID.x; // 0-31
+
+    BlockQ2K b = in_data.blocks[block_idx];
+    float d = b.d;
+    float dmin = b.dmin;
+
+    uint word_idx = tid / 2;
+    uint word = b.qs[word_idx];
+    uint pair = (tid % 2 == 0) ? (word & 0xFFFFu) : (word >> 16);
+    
+    uint q0 = pair & 0xFFu;
+    uint q1 = pair >> 8;
+
+    // Vectorized store: 256 elements per block = 64 vec4s.
+    // Each thread writes 2 vec4s (8 elements).
+    uint out_base_vec4 = block_idx * 64 + tid * 2;
+
+    vec4 v0;
+    v0.x = float(q0 & 0x03u) * d + dmin;
+    v0.y = float((q0 >> 2) & 0x03u) * d + dmin;
+    v0.z = float((q0 >> 4) & 0x03u) * d + dmin;
+    v0.w = float((q0 >> 6) & 0x03u) * d + dmin;
+    out_data.values[out_base_vec4 + 0] = v0;
+
+    vec4 v1;
+    v1.x = float(q1 & 0x03u) * d + dmin;
+    v1.y = float((q1 >> 2) & 0x03u) * d + dmin;
+    v1.z = float((q1 >> 4) & 0x03u) * d + dmin;
+    v1.w = float((q1 >> 6) & 0x03u) * d + dmin;
+    out_data.values[out_base_vec4 + 1] = v1;
+}

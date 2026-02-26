@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package mesh;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/groovy-byte/agent-mesh-core/proto";
+
+// --- OS Resource Tracking (Strict Core) ---
+
+message OSResources {
+  double cpu_usage_percent = 1;
+  uint64 memory_used_bytes = 2;
+  uint64 memory_total_bytes = 3;
+  double disk_io_wait = 4;
+}
+
+// --- Mesh Control Signals ---
+
+enum AgentRole {
+  OPERATIONAL = 0; // NATS-based fast path
+  STRATEGIC = 1;   // gRPC-based reasoning path
+}
+
+message HandshakeRequest {
+  string agent_id = 1;
+  repeated string capabilities = 2;
+  AgentRole initial_role = 3;
+}
+
+message HandshakeResponse {
+  string session_id = 1;
+  bool approved = 2;
+  string error_message = 3;
+  OSResources resource_limits = 4;
+}
+
+message Heartbeat {
+  string agent_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  OSResources current_load = 3;
+  AgentRole current_role = 4;
+}
+
+// --- The Evolutionary Bridge ---
+
+message AgentAction {
+  string agent_id = 1;
+  string action_type = 2; // e.g. "OS_COMPILATION", "REASONING", "SEARCH"
+  
+  // Strict parameters for known OS operations
+  OSResources resource_impact = 3;
+  
+  // The JSON Flex-Layer: for unmodeled task data/self-programming
+  google.protobuf.Struct payload = 4;
+  
+  // Strategic reasoning context (populated when in Strategic role)
+  string reasoning_chain = 5;
+
+  // Intent declaration for predictive throttling (AgentCgroup)
+  string task_intent = 6; 
+
+  // --- Phase 7: ScheInfer Hints ---
+  uint64 data_size_bytes = 7; // Size of the tensor/data to be processed
+}
+
+message ActionResponse {
+  bool success = 1;
+  google.protobuf.Struct result = 2;
+  string error = 3;
+  
+  // Signal for role evolution (e.g. promote to Boss)
+  bool promotion_suggested = 4;
+
+  // --- Phase 7: ScheInfer Decision ---
+  string routing_provider = 5; // e.g. "CPU_AVX2", "GPU_CUDA", "GPU_VULKAN"
+
+  // Explicit role enforcement from controller (Task 5.1 cleanup)
+  AgentRole required_role = 6;
+}
+
+// --- Phase 8: Hardware-Aware LLM Extension ---
+
+message InferenceRequest {
+  string agent_id = 1;
+  string prompt = 2;
+  uint32 max_tokens = 3;
+  float temperature = 4;
+  
+  // Adaptive Hint: Expected KV Cache size in bytes
+  uint64 expected_kv_cache_bytes = 5;
+}
+
+message InferenceResponse {
+  string text = 1;
+  uint32 tokens_used = 2;
+  string hardware_path = 3; // The path chosen by ScheInfer
+  float latency_ms = 4;
+  float throughput_gbs = 5; 
+  bool avx512_usage = 6;
+}
+
+// --- Synthesis Protocol ---
+
+message SynthesisRequest {
+  repeated string agent_ids = 1;
+  string target_goal = 2;
+  repeated AgentAction actions_to_merge = 3;
+}
+
+message SynthesisResponse {
+  string synthesized_state = 1;
+  float confidence_score = 2;
+}
+
+// --- Strategic Service (gRPC) ---
+
+service StrategicMesh {
+  // Handshake to enter the mesh
+  rpc RegisterAgent(HandshakeRequest) returns (HandshakeResponse);
+  
+  // Execute high-complexity planning or reasoning tasks
+  rpc ExecuteStrategicAction(AgentAction) returns (ActionResponse);
+  
+  // Semantic search across shared context and research papers
+  rpc SemanticSearch(SearchRequest) returns (SearchResponse);
+
+  // Synchronize state for failed node recovery
+  rpc GetStateReconstitution(HandshakeRequest) returns (AgentAction);
+
+  // Synthesize parallel agent outputs (AdaptOrch)
+  rpc SynthesizeOutputs(SynthesisRequest) returns (SynthesisResponse);
+
+  // Phase 8: Hardware-Aware Inference
+  rpc GenerateResponse(InferenceRequest) returns (InferenceResponse);
+
+  // Audit & Performance Stats
+  rpc GetMeshStats(StatsRequest) returns (MeshStats);
+}
+
+message StatsRequest {}
+
+message MeshStats {
+  int32 agents_active = 1;
+  map<string, AgentMetrics> agent_logs = 2;
+  map<string, InfluenceMap> contribution_matrix = 3;
+}
+
+message AgentMetrics {
+  uint32 tool_calls = 1;
+  repeated string failed_tasks = 2;
+  float avg_latency_ms = 3;
+  uint32 total_tokens = 4;
+}
+
+message InfluenceMap {
+  map<string, double> influence = 1;
+}
+
+message SearchRequest {
+  string agent_id = 1;
+  string query = 2;
+  int32 max_results = 3;
+}
+
+message SearchResponse {
+  repeated SearchResult results = 1;
+  string reasoning_context = 2; // Contextual relevance from research
+}
+
+message SearchResult {
+  string source = 3; // e.g. "Research Paper", "Student-A Log"
+  string content = 4;
+  float score = 5;
+}
