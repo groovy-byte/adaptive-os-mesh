@@ -8,22 +8,22 @@ import (
 	pb "github.com/groovy-byte/agent-mesh-core/proto"
 )
 
-// AgentInfo represents an active agent in the mesh
+// AgentInfo represents an active agent in the mesh.
 type AgentInfo struct {
 	ID            string
 	Role          pb.AgentRole
 	Capabilities  []string
 	Neighbors     []string
-	UtilityScore  float64 // DSBO Utility tracking
+	UtilityScore  float64 // Tracks agent utility for DSBO.
 	TotalLatency  float32
 	TotalTokens   uint32
 	RequestCount  uint32
 	ToolCalls     uint32
-	FailedTasks   []string // Last 5 failed tasks
-	MaxThroughput float32  // NEW: Peak GB/s tracked
+	FailedTasks   []string // Stores the last 5 failed task names.
+	MaxThroughput float32  // Peak GB/s throughput observed.
 }
 
-// MeshRegistry manages the active agents and their communication neighborhoods
+// MeshRegistry manages the active agents and their communication neighborhoods.
 type MeshRegistry struct {
 	mu                 sync.RWMutex
 	agents             map[string]*AgentInfo
@@ -37,7 +37,7 @@ func NewMeshRegistry() *MeshRegistry {
 	}
 }
 
-// RecordContribution tracks the Value of Contribution (VoC) between agents
+// RecordContribution tracks the Value of Contribution (VoC) between agents.
 func (r *MeshRegistry) RecordContribution(sourceID, targetID string, score float64) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -45,14 +45,14 @@ func (r *MeshRegistry) RecordContribution(sourceID, targetID string, score float
 	if _, ok := r.contributionMatrix[sourceID]; !ok {
 		r.contributionMatrix[sourceID] = make(map[string]float64)
 	}
-	// Aggregate influence with normalization clamp
+	// Aggregate influence, clamping at 1.0.
 	r.contributionMatrix[sourceID][targetID] += score
 	if r.contributionMatrix[sourceID][targetID] > 1.0 {
 		r.contributionMatrix[sourceID][targetID] = 1.0
 	}
 }
 
-// GetContributionDetail returns how a specific agent influenced others
+// GetContributionDetail returns how a specific agent influenced others.
 func (r *MeshRegistry) GetContributionDetail(id string) map[string]float64 {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
@@ -66,7 +66,7 @@ func (r *MeshRegistry) GetContributionDetail(id string) map[string]float64 {
 	return detail
 }
 
-// GetAgent returns a thread-safe copy of an agent's info
+// GetAgent returns a thread-safe copy of an agent's info.
 func (r *MeshRegistry) GetAgent(id string) (AgentInfo, bool) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
@@ -75,7 +75,7 @@ func (r *MeshRegistry) GetAgent(id string) (AgentInfo, bool) {
 		return AgentInfo{}, false
 	}
 	
-	// Deep copy slices to prevent external modification
+	// Create a deep copy to prevent race conditions.
 	failedTasks := make([]string, len(info.FailedTasks))
 	copy(failedTasks, info.FailedTasks)
 	
@@ -86,48 +86,50 @@ func (r *MeshRegistry) GetAgent(id string) (AgentInfo, bool) {
 	copy(neighbors, info.Neighbors)
 
 	return AgentInfo{
-		ID:           info.ID,
-		Role:         info.Role,
-		Capabilities: caps,
-		Neighbors:    neighbors,
-		UtilityScore: info.UtilityScore,
-		TotalLatency: info.TotalLatency,
-		TotalTokens:  info.TotalTokens,
-		RequestCount: info.RequestCount,
-		ToolCalls:    info.ToolCalls,
-		FailedTasks:  failedTasks,
+		ID:            info.ID,
+		Role:          info.Role,
+		Capabilities:  caps,
+		Neighbors:     neighbors,
+		UtilityScore:  info.UtilityScore,
+		TotalLatency:  info.TotalLatency,
+		TotalTokens:   info.TotalTokens,
+		RequestCount:  info.RequestCount,
+		ToolCalls:     info.ToolCalls,
+		FailedTasks:   failedTasks,
+		MaxThroughput: info.MaxThroughput,
 	}, true
 }
 
-// RegisterAgent handles the "One-Hop" handshake logic
+// RegisterAgent handles the initial "One-Hop" handshake and agent registration.
 func (r *MeshRegistry) RegisterAgent(req *pb.HandshakeRequest) (*pb.HandshakeResponse, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	log.Printf("[Mesh] Handshake received from Agent: %s", req.AgentId)
 
-	// DSBO: Initial neighborhood selection
+	// Initial neighborhood selection via Distributed Slot-based Bayesian Optimization (DSBO) principle.
 	neighbors := []string{}
 	for id := range r.agents {
 		if id != req.AgentId {
 			neighbors = append(neighbors, id)
-			if len(neighbors) >= 2 { // Increased limit for evaluation
+			if len(neighbors) >= 2 { // Limit initial neighbors for evaluation.
 				break
 			}
 		}
 	}
 
 	agent := &AgentInfo{
-		ID:           req.AgentId,
-		Role:         req.InitialRole,
-		Capabilities: req.Capabilities,
-		Neighbors:    neighbors,
-		UtilityScore: 1.0, // Initial base utility
-		TotalLatency: 0,
-		TotalTokens:  0,
-		RequestCount: 0,
-		ToolCalls:    0,
-		FailedTasks:  []string{},
+		ID:            req.AgentId,
+		Role:          req.InitialRole,
+		Capabilities:  req.Capabilities,
+		Neighbors:     neighbors,
+		UtilityScore:  1.0, // Initial base utility.
+		TotalLatency:  0,
+		TotalTokens:   0,
+		RequestCount:  0,
+		ToolCalls:     0,
+		FailedTasks:   []string{},
+		MaxThroughput: 0,
 	}
 	r.agents[req.AgentId] = agent
 
@@ -141,7 +143,7 @@ func (r *MeshRegistry) RegisterAgent(req *pb.HandshakeRequest) (*pb.HandshakeRes
 	}, nil
 }
 
-// RecordTaskResult logs the outcome of an agent operation
+// RecordTaskResult logs the outcome of an agent operation.
 func (r *MeshRegistry) RecordTaskResult(id string, success bool, taskName string, toolCount uint32) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -153,7 +155,7 @@ func (r *MeshRegistry) RecordTaskResult(id string, success bool, taskName string
 
 	agent.ToolCalls += toolCount
 	if !success {
-		// Circular buffer of last 5 failures
+		// Use a circular buffer for the last 5 failures.
 		agent.FailedTasks = append([]string{taskName}, agent.FailedTasks...)
 		if len(agent.FailedTasks) > 5 {
 			agent.FailedTasks = agent.FailedTasks[:5]
@@ -161,7 +163,7 @@ func (r *MeshRegistry) RecordTaskResult(id string, success bool, taskName string
 	}
 }
 
-// RecordMetrics updates the performance tracking for an agent
+// RecordMetrics updates the performance tracking for an agent.
 func (r *MeshRegistry) RecordMetrics(id string, latency float32, tokens uint32, throughput float32) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -175,7 +177,7 @@ func (r *MeshRegistry) RecordMetrics(id string, latency float32, tokens uint32, 
 	}
 }
 
-// AgentStats represents performance metrics for an agent
+// AgentStats represents performance metrics for an agent.
 type AgentStats struct {
 	ID         string
 	AvgLatency float32
@@ -203,7 +205,7 @@ func (r *MeshRegistry) GetStatsSummary() []AgentStats {
 	return stats
 }
 
-// ReevaluateNeighbors implements DSBO and Proactive Healing signals
+// ReevaluateNeighbors implements DSBO and Proactive Healing signals.
 func (r *MeshRegistry) ReevaluateNeighbors(agentID string, novelContext bool, arbiter *Arbiter) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -213,22 +215,22 @@ func (r *MeshRegistry) ReevaluateNeighbors(agentID string, novelContext bool, ar
 		return
 	}
 
-	// Update Utility Score
+	// Update agent utility score based on context novelty.
 	if novelContext {
 		agent.UtilityScore += 0.1
 	} else {
 		agent.UtilityScore -= 0.05
 	}
 
-	// Proactive Healing Signal: If utility drops rapidly, trigger state snapshot
+	// Proactive Healing: If utility drops, trigger a state snapshot via the arbiter.
 	if agent.UtilityScore < 0.7 {
-		log.Printf("[Mesh] 🩹 Utility Drop: Notifying Arbiter to snapshot %s for proactive healing", agentID)
-		// Signal logic handled in the main controller loop using the arbiter
+		log.Printf("[Mesh] Utility Drop: Notifying Arbiter to snapshot %s for proactive healing", agentID)
+		// Signal logic is handled in the main controller loop.
 	}
 
-	// Pruning Logic
+	// DSBO Pruning Logic: Prune communication path if utility is low.
 	if agent.UtilityScore < 0.5 && len(agent.Neighbors) > 1 {
-		log.Printf("[DSBO] Pruning communication path for %s due to low novelty", agentID)
+		log.Printf("[Mesh] Pruning communication path for %s due to low novelty", agentID)
 		agent.Neighbors = agent.Neighbors[:len(agent.Neighbors)-1]
 		agent.UtilityScore = 0.8 
 	}

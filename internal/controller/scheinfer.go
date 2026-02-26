@@ -44,32 +44,32 @@ func NewScheInfer(l3Size uint64, gpuName string, computeCap int, avx512 bool) *S
 	}
 }
 
-// RouteTask determines the optimal execution provider for a given tensor size
+// RouteTask determines the optimal execution provider for a given tensor size.
 func (s *ScheInfer) RouteTask(dataSizeBytes uint64) string {
-	// Strategic Pivot: The 16MB Cache Line
+	// If the data fits within the CPU's L3 cache, route to CPU to avoid PCIe transfer overhead.
 	if dataSizeBytes < s.l3CacheSize {
-		log.Printf("[ScheInfer] 🎯 Cache-Resident Task (%d KB): Routing to CPU AVX2", dataSizeBytes/1024)
+		log.Printf("[ScheInfer] Cache-Resident Task (%d KB): Routing to CPU AVX2", dataSizeBytes/1024)
 		return "CPU_AVX2"
 	}
 
-	// For large tensors, prefer GPU if available
+	// For larger tensors, prefer a GPU if an appropriate one is available.
 	if s.hasCuda {
-		log.Printf("[ScheInfer] 🚀 High-Throughput Task (%d MB): Routing to NVIDIA CUDA (Ampere+)", dataSizeBytes/(1024*1024))
+		log.Printf("[ScheInfer] High-Throughput Task (%d MB): Routing to NVIDIA CUDA (Ampere+)", dataSizeBytes/(1024*1024))
 		return "GPU_CUDA"
 	}
 
 	if s.hasVulkan {
-		log.Printf("[ScheInfer] 🌐 Legacy GPU Task (%d MB): Routing to Vulkan", dataSizeBytes/(1024*1024))
+		log.Printf("[ScheInfer] Legacy GPU Task (%d MB): Routing to Vulkan", dataSizeBytes/(1024*1024))
 		return "GPU_VULKAN"
 	}
 
-	// AVX-512 Tier: High-performance CPU fallback when no GPU exists (Task 11.1)
+	// If no suitable GPU is found, use the high-performance AVX-512 CPU path as a fallback.
 	if s.hasAvx512 {
-		log.Printf("[ScheInfer] ⚡ AVX-512 Optimized Path (%d MB): Routing to i1185G7 Vector Tier", dataSizeBytes/(1024*1024))
+		log.Printf("[ScheInfer] AVX-512 Optimized Path (%d MB): Routing to Vector Tier", dataSizeBytes/(1024*1024))
 		return "CPU_AVX512"
 	}
 
-	log.Printf("[ScheInfer] ⚠️ DRAM-Bound Task (%d MB): Routing to standard CPU path", dataSizeBytes/(1024*1024))
+	log.Printf("[ScheInfer] DRAM-Bound Task (%d MB): Routing to standard CPU path", dataSizeBytes/(1024*1024))
 	return "CPU_AVX2"
 }
 

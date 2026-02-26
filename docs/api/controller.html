@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>controller - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.26.0";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/pkg/">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/pkg/">GoDoc</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package controller
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/groovy-byte/agent-mesh-core/internal/controller"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="#InitializeGlobalScheduler">func InitializeGlobalScheduler(l3Size uint64, gpuName string, computeCap int, avx512 bool)</a></dd>
+			
+			
+				
+				<dd><a href="#AgentInfo">type AgentInfo</a></dd>
+				
+				
+			
+				
+				<dd><a href="#AgentStats">type AgentStats</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Arbiter">type Arbiter</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewArbiter">func NewArbiter() *Arbiter</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Arbiter.GetState">func (a *Arbiter) GetState(agentID string) (*pb.AgentAction, bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Arbiter.ReleaseLock">func (a *Arbiter) ReleaseLock(agentID string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Arbiter.RequestStrategicLock">func (a *Arbiter) RequestStrategicLock(agentID string) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Arbiter.SaveState">func (a *Arbiter) SaveState(state *pb.AgentAction)</a></dd>
+				
+			
+				
+				<dd><a href="#InferenceController">type InferenceController</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewInferenceController">func NewInferenceController(scheduler *ScheInfer) *InferenceController</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#InferenceController.Generate">func (c *InferenceController) Generate(ctx context.Context, req *pb.InferenceRequest) (*pb.InferenceResponse, error)</a></dd>
+				
+			
+				
+				<dd><a href="#KVCacheController">type KVCacheController</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewKVCacheController">func NewKVCacheController(js nats.JetStreamContext) *KVCacheController</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#KVCacheController.BroadcastDelta">func (k *KVCacheController) BroadcastDelta(agentID string, delta []byte) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#KVCacheController.SubscribeToDeltas">func (k *KVCacheController) SubscribeToDeltas(agentID string, handler func([]byte)) (*nats.Subscription, error)</a></dd>
+				
+			
+				
+				<dd><a href="#MeshRegistry">type MeshRegistry</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewMeshRegistry">func NewMeshRegistry() *MeshRegistry</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.GetAgent">func (r *MeshRegistry) GetAgent(id string) (AgentInfo, bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.GetContributionDetail">func (r *MeshRegistry) GetContributionDetail(id string) map[string]float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.GetStatsSummary">func (r *MeshRegistry) GetStatsSummary() []AgentStats</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.RecordContribution">func (r *MeshRegistry) RecordContribution(sourceID, targetID string, score float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.RecordMetrics">func (r *MeshRegistry) RecordMetrics(id string, latency float32, tokens uint32, throughput float32)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.RecordTaskResult">func (r *MeshRegistry) RecordTaskResult(id string, success bool, taskName string, toolCount uint32)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.ReevaluateNeighbors">func (r *MeshRegistry) ReevaluateNeighbors(agentID string, novelContext bool, arbiter *Arbiter)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.RegisterAgent">func (r *MeshRegistry) RegisterAgent(req *pb.HandshakeRequest) (*pb.HandshakeResponse, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MeshRegistry.UpdateRole">func (r *MeshRegistry) UpdateRole(id string, role pb.AgentRole)</a></dd>
+				
+			
+				
+				<dd><a href="#QdrantController">type QdrantController</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewQdrantController">func NewQdrantController() *QdrantController</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#QdrantController.Search">func (q *QdrantController) Search(ctx context.Context, req *pb.SearchRequest) (*pb.SearchResponse, error)</a></dd>
+				
+			
+				
+				<dd><a href="#RoleSwitcher">type RoleSwitcher</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewRoleSwitcher">func NewRoleSwitcher() *RoleSwitcher</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RoleSwitcher.EvaluateTransition">func (s *RoleSwitcher) EvaluateTransition(info *AgentInfo, currentLoad *pb.OSResources, intent string) pb.AgentRole</a></dd>
+				
+			
+				
+				<dd><a href="#ScheInfer">type ScheInfer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewScheInfer">func NewScheInfer(l3Size uint64, gpuName string, computeCap int, avx512 bool) *ScheInfer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ScheInfer.GetMeshCapability">func (s *ScheInfer) GetMeshCapability() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ScheInfer.RouteLayer">func (s *ScheInfer) RouteLayer(layerID int) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ScheInfer.RouteTask">func (s *ScheInfer) RouteTask(dataSizeBytes uint64) string</a></dd>
+				
+			
+				
+				<dd><a href="#SearchController">type SearchController</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewSearchController">func NewSearchController(storeName string) *SearchController</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SearchController.PerformSearch">func (s *SearchController) PerformSearch(ctx context.Context, req *pb.SearchRequest) (*pb.SearchResponse, error)</a></dd>
+				
+			
+				
+				<dd><a href="#SoftThrottle">type SoftThrottle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewSoftThrottle">func NewSoftThrottle() *SoftThrottle</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SoftThrottle.IsNovel">func (t *SoftThrottle) IsNovel(query string) bool</a></dd>
+				
+			
+				
+				<dd><a href="#SynthesisController">type SynthesisController</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewSynthesisController">func NewSynthesisController() *SynthesisController</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SynthesisController.Synthesize">func (s *SynthesisController) Synthesize(req *pb.SynthesisRequest) (*pb.SynthesisResponse, error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/arbiter.go">arbiter.go</a>
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/inference.go">inference.go</a>
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/kv_cache.go">kv_cache.go</a>
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go">mesh.go</a>
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/qdrant.go">qdrant.go</a>
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/roles.go">roles.go</a>
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/scheinfer.go">scheinfer.go</a>
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/search.go">search.go</a>
+			
+				<a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/synthesis.go">synthesis.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				
+				<pre>const <span id="LockTTL">LockTTL</span> = 30 * <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Second">Second</a></pre>
+			
+		
+		
+		
+			
+			
+			<h2 id="InitializeGlobalScheduler">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/scheinfer.go?s=170:260#L3">InitializeGlobalScheduler</a>
+				<a class="permalink" href="#InitializeGlobalScheduler">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func InitializeGlobalScheduler(l3Size <a href="/pkg/builtin/#uint64">uint64</a>, gpuName <a href="/pkg/builtin/#string">string</a>, computeCap <a href="/pkg/builtin/#int">int</a>, avx512 <a href="/pkg/builtin/#bool">bool</a>)</pre>
+			<p>InitializeGlobalScheduler sets the scheduler used by the C backend
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="AgentInfo">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=159:550#L2">AgentInfo</a>
+				<a class="permalink" href="#AgentInfo">&#xb6;</a>
+				
+				
+			</h2>
+			<p>AgentInfo represents an active agent in the mesh.
+
+			<pre>type AgentInfo struct {
+<span id="AgentInfo.ID"></span>    ID            <a href="/pkg/builtin/#string">string</a>
+<span id="AgentInfo.Role"></span>    Role          <a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#AgentRole">AgentRole</a>
+<span id="AgentInfo.Capabilities"></span>    Capabilities  []<a href="/pkg/builtin/#string">string</a>
+<span id="AgentInfo.Neighbors"></span>    Neighbors     []<a href="/pkg/builtin/#string">string</a>
+<span id="AgentInfo.UtilityScore"></span>    UtilityScore  <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Tracks agent utility for DSBO.</span>
+<span id="AgentInfo.TotalLatency"></span>    TotalLatency  <a href="/pkg/builtin/#float32">float32</a>
+<span id="AgentInfo.TotalTokens"></span>    TotalTokens   <a href="/pkg/builtin/#uint32">uint32</a>
+<span id="AgentInfo.RequestCount"></span>    RequestCount  <a href="/pkg/builtin/#uint32">uint32</a>
+<span id="AgentInfo.ToolCalls"></span>    ToolCalls     <a href="/pkg/builtin/#uint32">uint32</a>
+<span id="AgentInfo.FailedTasks"></span>    FailedTasks   []<a href="/pkg/builtin/#string">string</a> <span class="comment">// Stores the last 5 failed task names.</span>
+<span id="AgentInfo.MaxThroughput"></span>    MaxThroughput <a href="/pkg/builtin/#float32">float32</a>  <span class="comment">// Peak GB/s throughput observed.</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="AgentStats">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=4932:5035#L171">AgentStats</a>
+				<a class="permalink" href="#AgentStats">&#xb6;</a>
+				
+				
+			</h2>
+			<p>AgentStats represents performance metrics for an agent.
+
+			<pre>type AgentStats struct {
+<span id="AgentStats.ID"></span>    ID         <a href="/pkg/builtin/#string">string</a>
+<span id="AgentStats.AvgLatency"></span>    AvgLatency <a href="/pkg/builtin/#float32">float32</a>
+<span id="AgentStats.Requests"></span>    Requests   <a href="/pkg/builtin/#uint32">uint32</a>
+<span id="AgentStats.Tokens"></span>    Tokens     <a href="/pkg/builtin/#uint32">uint32</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Arbiter">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/arbiter.go?s=202:401#L4">Arbiter</a>
+				<a class="permalink" href="#Arbiter">&#xb6;</a>
+				
+				
+			</h2>
+			<p>Arbiter manages global strategic locks and state recovery
+
+			<pre>type Arbiter struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewArbiter">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/arbiter.go?s=403:429#L11">NewArbiter</a>
+					<a class="permalink" href="#NewArbiter">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewArbiter() *<a href="#Arbiter">Arbiter</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="Arbiter.GetState">func (*Arbiter) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/arbiter.go?s=1748:1814#L58">GetState</a>
+					<a class="permalink" href="#Arbiter.GetState">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (a *<a href="#Arbiter">Arbiter</a>) GetState(agentID <a href="/pkg/builtin/#string">string</a>) (*<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#AgentAction">AgentAction</a>, <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Arbiter.ReleaseLock">func (*Arbiter) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/arbiter.go?s=1323:1368#L42">ReleaseLock</a>
+					<a class="permalink" href="#Arbiter.ReleaseLock">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (a *<a href="#Arbiter">Arbiter</a>) ReleaseLock(agentID <a href="/pkg/builtin/#string">string</a>)</pre>
+				<p>ReleaseLock frees the strategic reasoning path
+
+				
+				
+				
+			
+				
+				<h3 id="Arbiter.RequestStrategicLock">func (*Arbiter) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/arbiter.go?s=597:656#L18">RequestStrategicLock</a>
+					<a class="permalink" href="#Arbiter.RequestStrategicLock">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (a *<a href="#Arbiter">Arbiter</a>) RequestStrategicLock(agentID <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>RequestStrategicLock implements the Counterbalance mechanism to prevent &apos;Too many bosses&apos;
+
+				
+				
+				
+			
+				
+				<h3 id="Arbiter.SaveState">func (*Arbiter) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/arbiter.go?s=1621:1671#L52">SaveState</a>
+					<a class="permalink" href="#Arbiter.SaveState">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (a *<a href="#Arbiter">Arbiter</a>) SaveState(state *<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#AgentAction">AgentAction</a>)</pre>
+				<p>SaveState records the last known operational state for reconstitution (Task 4.2)
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="InferenceController">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/inference.go?s=175:232#L2">InferenceController</a>
+				<a class="permalink" href="#InferenceController">&#xb6;</a>
+				
+				
+			</h2>
+			<p>InferenceController handles hardware-aware LLM requests
+
+			<pre>type InferenceController struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewInferenceController">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/inference.go?s=234:304#L6">NewInferenceController</a>
+					<a class="permalink" href="#NewInferenceController">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewInferenceController(scheduler *<a href="#ScheInfer">ScheInfer</a>) *<a href="#InferenceController">InferenceController</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="InferenceController.Generate">func (*InferenceController) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/inference.go?s=444:560#L13">Generate</a>
+					<a class="permalink" href="#InferenceController.Generate">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="#InferenceController">InferenceController</a>) Generate(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, req *<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#InferenceRequest">InferenceRequest</a>) (*<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#InferenceResponse">InferenceResponse</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>Generate processes the LLM request by selecting the optimal hardware path
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="KVCacheController">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/kv_cache.go?s=156:215#L1">KVCacheController</a>
+				<a class="permalink" href="#KVCacheController">&#xb6;</a>
+				
+				
+			</h2>
+			<p>KVCacheController handles high-speed conversation state sync across the mesh
+
+			<pre>type KVCacheController struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewKVCacheController">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/kv_cache.go?s=217:287#L4">NewKVCacheController</a>
+					<a class="permalink" href="#NewKVCacheController">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewKVCacheController(js nats.<a href="#JetStreamContext">JetStreamContext</a>) *<a href="#KVCacheController">KVCacheController</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="KVCacheController.BroadcastDelta">func (*KVCacheController) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/kv_cache.go?s=715:793#L19">BroadcastDelta</a>
+					<a class="permalink" href="#KVCacheController.BroadcastDelta">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (k *<a href="#KVCacheController">KVCacheController</a>) BroadcastDelta(agentID <a href="/pkg/builtin/#string">string</a>, delta []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>BroadcastDelta sends a state fragment to all nodes in the mesh
+
+				
+				
+				
+			
+				
+				<h3 id="KVCacheController.SubscribeToDeltas">func (*KVCacheController) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/kv_cache.go?s=1143:1254#L31">SubscribeToDeltas</a>
+					<a class="permalink" href="#KVCacheController.SubscribeToDeltas">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (k *<a href="#KVCacheController">KVCacheController</a>) SubscribeToDeltas(agentID <a href="/pkg/builtin/#string">string</a>, handler func([]<a href="/pkg/builtin/#byte">byte</a>)) (*nats.<a href="#Subscription">Subscription</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>SubscribeToDeltas allows a node to listen for conversation state updates
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="MeshRegistry">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=633:815#L17">MeshRegistry</a>
+				<a class="permalink" href="#MeshRegistry">&#xb6;</a>
+				
+				
+			</h2>
+			<p>MeshRegistry manages the active agents and their communication neighborhoods.
+
+			<pre>type MeshRegistry struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewMeshRegistry">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=817:853#L23">NewMeshRegistry</a>
+					<a class="permalink" href="#NewMeshRegistry">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewMeshRegistry() *<a href="#MeshRegistry">MeshRegistry</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="MeshRegistry.GetAgent">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=1931:1991#L60">GetAgent</a>
+					<a class="permalink" href="#MeshRegistry.GetAgent">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) GetAgent(id <a href="/pkg/builtin/#string">string</a>) (<a href="#AgentInfo">AgentInfo</a>, <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>GetAgent returns a thread-safe copy of an agent&apos;s info.
+
+				
+				
+				
+			
+				
+				<h3 id="MeshRegistry.GetContributionDetail">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=1581:1655#L46">GetContributionDetail</a>
+					<a class="permalink" href="#MeshRegistry.GetContributionDetail">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) GetContributionDetail(id <a href="/pkg/builtin/#string">string</a>) map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>GetContributionDetail returns how a specific agent influenced others.
+
+				
+				
+				
+			
+				
+				<h3 id="MeshRegistry.GetStatsSummary">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=5037:5090#L178">GetStatsSummary</a>
+					<a class="permalink" href="#MeshRegistry.GetStatsSummary">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) GetStatsSummary() []<a href="#AgentStats">AgentStats</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="MeshRegistry.RecordContribution">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=1072:1155#L31">RecordContribution</a>
+					<a class="permalink" href="#MeshRegistry.RecordContribution">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) RecordContribution(sourceID, targetID <a href="/pkg/builtin/#string">string</a>, score <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>RecordContribution tracks the Value of Contribution (VoC) between agents.
+
+				
+				
+				
+			
+				
+				<h3 id="MeshRegistry.RecordMetrics">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=4530:4629#L157">RecordMetrics</a>
+					<a class="permalink" href="#MeshRegistry.RecordMetrics">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) RecordMetrics(id <a href="/pkg/builtin/#string">string</a>, latency <a href="/pkg/builtin/#float32">float32</a>, tokens <a href="/pkg/builtin/#uint32">uint32</a>, throughput <a href="/pkg/builtin/#float32">float32</a>)</pre>
+				<p>RecordMetrics updates the performance tracking for an agent.
+
+				
+				
+				
+			
+				
+				<h3 id="MeshRegistry.RecordTaskResult">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=4022:4121#L137">RecordTaskResult</a>
+					<a class="permalink" href="#MeshRegistry.RecordTaskResult">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) RecordTaskResult(id <a href="/pkg/builtin/#string">string</a>, success <a href="/pkg/builtin/#bool">bool</a>, taskName <a href="/pkg/builtin/#string">string</a>, toolCount <a href="/pkg/builtin/#uint32">uint32</a>)</pre>
+				<p>RecordTaskResult logs the outcome of an agent operation.
+
+				
+				
+				
+			
+				
+				<h3 id="MeshRegistry.ReevaluateNeighbors">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=5563:5658#L199">ReevaluateNeighbors</a>
+					<a class="permalink" href="#MeshRegistry.ReevaluateNeighbors">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) ReevaluateNeighbors(agentID <a href="/pkg/builtin/#string">string</a>, novelContext <a href="/pkg/builtin/#bool">bool</a>, arbiter *<a href="#Arbiter">Arbiter</a>)</pre>
+				<p>ReevaluateNeighbors implements DSBO and Proactive Healing signals.
+
+				
+				
+				
+			
+				
+				<h3 id="MeshRegistry.RegisterAgent">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=2867:2960#L94">RegisterAgent</a>
+					<a class="permalink" href="#MeshRegistry.RegisterAgent">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) RegisterAgent(req *<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#HandshakeRequest">HandshakeRequest</a>) (*<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#HandshakeResponse">HandshakeResponse</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>RegisterAgent handles the initial &quot;One-Hop&quot; handshake and agent registration.
+
+				
+				
+				
+			
+				
+				<h3 id="MeshRegistry.UpdateRole">func (*MeshRegistry) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/mesh.go?s=6482:6545#L229">UpdateRole</a>
+					<a class="permalink" href="#MeshRegistry.UpdateRole">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r *<a href="#MeshRegistry">MeshRegistry</a>) UpdateRole(id <a href="/pkg/builtin/#string">string</a>, role <a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#AgentRole">AgentRole</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="QdrantController">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/qdrant.go?s=782:859#L34">QdrantController</a>
+				<a class="permalink" href="#QdrantController">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type QdrantController struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewQdrantController">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/qdrant.go?s=861:905#L39">NewQdrantController</a>
+					<a class="permalink" href="#NewQdrantController">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewQdrantController() *<a href="#QdrantController">QdrantController</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="QdrantController.Search">func (*QdrantController) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/qdrant.go?s=1020:1125#L46">Search</a>
+					<a class="permalink" href="#QdrantController.Search">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (q *<a href="#QdrantController">QdrantController</a>) Search(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, req *<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#SearchRequest">SearchRequest</a>) (*<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#SearchResponse">SearchResponse</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="RoleSwitcher">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/roles.go?s=177:254#L1">RoleSwitcher</a>
+				<a class="permalink" href="#RoleSwitcher">&#xb6;</a>
+				
+				
+			</h2>
+			<p>RoleSwitcher evaluates system health and suggests agent role transitions
+
+			<pre>type RoleSwitcher struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewRoleSwitcher">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/roles.go?s=256:292#L5">NewRoleSwitcher</a>
+					<a class="permalink" href="#NewRoleSwitcher">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewRoleSwitcher() *<a href="#RoleSwitcher">RoleSwitcher</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="RoleSwitcher.EvaluateTransition">func (*RoleSwitcher) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/roles.go?s=456:571#L13">EvaluateTransition</a>
+					<a class="permalink" href="#RoleSwitcher.EvaluateTransition">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="#RoleSwitcher">RoleSwitcher</a>) EvaluateTransition(info *<a href="#AgentInfo">AgentInfo</a>, currentLoad *<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#OSResources">OSResources</a>, intent <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#AgentRole">AgentRole</a></pre>
+				<p>EvaluateTransition implements Difficulty-Aware Topology Selection
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ScheInfer">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/scheinfer.go?s=644:763#L17">ScheInfer</a>
+				<a class="permalink" href="#ScheInfer">&#xb6;</a>
+				
+				
+			</h2>
+			<p>ScheInfer handles intelligent task routing based on hardware topology
+
+			<pre>type ScheInfer struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewScheInfer">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/scheinfer.go?s=765:853#L25">NewScheInfer</a>
+					<a class="permalink" href="#NewScheInfer">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewScheInfer(l3Size <a href="/pkg/builtin/#uint64">uint64</a>, gpuName <a href="/pkg/builtin/#string">string</a>, computeCap <a href="/pkg/builtin/#int">int</a>, avx512 <a href="/pkg/builtin/#bool">bool</a>) *<a href="#ScheInfer">ScheInfer</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="ScheInfer.GetMeshCapability">func (*ScheInfer) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/scheinfer.go?s=2750:2796#L79">GetMeshCapability</a>
+					<a class="permalink" href="#ScheInfer.GetMeshCapability">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="#ScheInfer">ScheInfer</a>) GetMeshCapability() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>GetMeshCapability returns the node&apos;s performance profile for the Global Mesh
+
+				
+				
+				
+			
+				
+				<h3 id="ScheInfer.RouteLayer">func (*ScheInfer) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/scheinfer.go?s=2363:2413#L67">RouteLayer</a>
+					<a class="permalink" href="#ScheInfer.RouteLayer">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="#ScheInfer">ScheInfer</a>) RouteLayer(layerID <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#string">string</a></pre>
+				<p>RouteLayer implements Smart Layer Partitioning (Task 10.2)
+
+				
+				
+				
+			
+				
+				<h3 id="ScheInfer.RouteTask">func (*ScheInfer) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/scheinfer.go?s=1242:1300#L38">RouteTask</a>
+					<a class="permalink" href="#ScheInfer.RouteTask">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="#ScheInfer">ScheInfer</a>) RouteTask(dataSizeBytes <a href="/pkg/builtin/#uint64">uint64</a>) <a href="/pkg/builtin/#string">string</a></pre>
+				<p>RouteTask determines the optimal execution provider for a given tensor size.
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SearchController">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/search.go?s=197:247#L2">SearchController</a>
+				<a class="permalink" href="#SearchController">&#xb6;</a>
+				
+				
+			</h2>
+			<p>SearchController handles the bridge between gRPC and the Research Knowledge Base
+
+			<pre>type SearchController struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewSearchController">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/search.go?s=249:309#L6">NewSearchController</a>
+					<a class="permalink" href="#NewSearchController">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewSearchController(storeName <a href="/pkg/builtin/#string">string</a>) *<a href="#SearchController">SearchController</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="SearchController.PerformSearch">func (*SearchController) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/search.go?s=431:543#L13">PerformSearch</a>
+					<a class="permalink" href="#SearchController.PerformSearch">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="#SearchController">SearchController</a>) PerformSearch(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, req *<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#SearchRequest">SearchRequest</a>) (*<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#SearchResponse">SearchResponse</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>PerformSearch executes a semantic query against the corpus
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SoftThrottle">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/qdrant.go?s=256:380#L10">SoftThrottle</a>
+				<a class="permalink" href="#SoftThrottle">&#xb6;</a>
+				
+				
+			</h2>
+			<p>SoftThrottle implements the Value of Coordination (VoC) logic
+
+			<pre>type SoftThrottle struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewSoftThrottle">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/qdrant.go?s=382:418#L16">NewSoftThrottle</a>
+					<a class="permalink" href="#NewSoftThrottle">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewSoftThrottle() *<a href="#SoftThrottle">SoftThrottle</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="SoftThrottle.IsNovel">func (*SoftThrottle) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/qdrant.go?s=531:580#L23">IsNovel</a>
+					<a class="permalink" href="#SoftThrottle.IsNovel">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (t *<a href="#SoftThrottle">SoftThrottle</a>) IsNovel(query <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SynthesisController">type <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/synthesis.go?s=173:206#L1">SynthesisController</a>
+				<a class="permalink" href="#SynthesisController">&#xb6;</a>
+				
+				
+			</h2>
+			<p>SynthesisController implements the AdaptOrch Adaptive Synthesis Protocol
+
+			<pre>type SynthesisController struct{}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewSynthesisController">func <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/synthesis.go?s=208:258#L2">NewSynthesisController</a>
+					<a class="permalink" href="#NewSynthesisController">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewSynthesisController() *<a href="#SynthesisController">SynthesisController</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="SynthesisController.Synthesize">func (*SynthesisController) <a href="/src/github.com/groovy-byte/agent-mesh-core/internal/controller/synthesis.go?s=368:465#L7">Synthesize</a>
+					<a class="permalink" href="#SynthesisController.Synthesize">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="#SynthesisController">SynthesisController</a>) Synthesize(req *<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#SynthesisRequest">SynthesisRequest</a>) (*<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/">pb</a>.<a href="/pkg/github.com/groovy-byte/agent-mesh-core/proto/#SynthesisResponse">SynthesisResponse</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>Synthesize merges parallel agent outputs into a single coherent state
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.26.0.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

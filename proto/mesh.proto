@@ -7,7 +7,9 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/groovy-byte/agent-mesh-core/proto";
 
-// --- OS Resource Tracking (Strict Core) ---
+// Defines the core data structures and service contracts for the Adaptive OS Mesh.
+
+// --- OS Resource Tracking ---
 
 message OSResources {
   double cpu_usage_percent = 1;
@@ -16,11 +18,11 @@ message OSResources {
   double disk_io_wait = 4;
 }
 
-// --- Mesh Control Signals ---
+// --- Mesh Control Plane ---
 
 enum AgentRole {
-  OPERATIONAL = 0; // NATS-based fast path
-  STRATEGIC = 1;   // gRPC-based reasoning path
+  OPERATIONAL = 0; // Low-latency, high-throughput tasks via NATS.
+  STRATEGIC = 1;   // Complex, reasoning-heavy tasks via gRPC.
 }
 
 message HandshakeRequest {
@@ -43,59 +45,41 @@ message Heartbeat {
   AgentRole current_role = 4;
 }
 
-// --- The Evolutionary Bridge ---
+// --- Agent Actions & Responses ---
 
 message AgentAction {
   string agent_id = 1;
-  string action_type = 2; // e.g. "OS_COMPILATION", "REASONING", "SEARCH"
-  
-  // Strict parameters for known OS operations
+  string action_type = 2; // e.g., "OS_COMPILATION", "REASONING", "SEARCH".
   OSResources resource_impact = 3;
-  
-  // The JSON Flex-Layer: for unmodeled task data/self-programming
-  google.protobuf.Struct payload = 4;
-  
-  // Strategic reasoning context (populated when in Strategic role)
-  string reasoning_chain = 5;
-
-  // Intent declaration for predictive throttling (AgentCgroup)
-  string task_intent = 6; 
-
-  // --- Phase 7: ScheInfer Hints ---
-  uint64 data_size_bytes = 7; // Size of the tensor/data to be processed
+  google.protobuf.Struct payload = 4; // Flexible payload for arbitrary task data.
+  string reasoning_chain = 5; // Context for strategic tasks.
+  string task_intent = 6; // Intent declaration for predictive resource management.
+  uint64 data_size_bytes = 7; // Size hint for hardware-aware scheduling.
 }
 
 message ActionResponse {
   bool success = 1;
   google.protobuf.Struct result = 2;
   string error = 3;
-  
-  // Signal for role evolution (e.g. promote to Boss)
-  bool promotion_suggested = 4;
-
-  // --- Phase 7: ScheInfer Decision ---
-  string routing_provider = 5; // e.g. "CPU_AVX2", "GPU_CUDA", "GPU_VULKAN"
-
-  // Explicit role enforcement from controller (Task 5.1 cleanup)
-  AgentRole required_role = 6;
+  bool promotion_suggested = 4; // Suggests a role change to STRATEGIC.
+  string routing_provider = 5; // The hardware path chosen by the scheduler (e.g., "CPU_AVX2", "GPU_CUDA").
+  AgentRole required_role = 6; // Enforced role from the controller.
 }
 
-// --- Phase 8: Hardware-Aware LLM Extension ---
+// --- Hardware-Aware Inference ---
 
 message InferenceRequest {
   string agent_id = 1;
   string prompt = 2;
   uint32 max_tokens = 3;
   float temperature = 4;
-  
-  // Adaptive Hint: Expected KV Cache size in bytes
-  uint64 expected_kv_cache_bytes = 5;
+  uint64 expected_kv_cache_bytes = 5; // Hint for memory-intensive inference tasks.
 }
 
 message InferenceResponse {
   string text = 1;
   uint32 tokens_used = 2;
-  string hardware_path = 3; // The path chosen by ScheInfer
+  string hardware_path = 3; 
   float latency_ms = 4;
   float throughput_gbs = 5; 
   bool avx512_usage = 6;
@@ -117,27 +101,29 @@ message SynthesisResponse {
 // --- Strategic Service (gRPC) ---
 
 service StrategicMesh {
-  // Handshake to enter the mesh
+  // Registers an agent with the mesh.
   rpc RegisterAgent(HandshakeRequest) returns (HandshakeResponse);
   
-  // Execute high-complexity planning or reasoning tasks
+  // Executes a high-complexity task requiring strategic planning.
   rpc ExecuteStrategicAction(AgentAction) returns (ActionResponse);
   
-  // Semantic search across shared context and research papers
+  // Performs a semantic search over the knowledge base.
   rpc SemanticSearch(SearchRequest) returns (SearchResponse);
 
-  // Synchronize state for failed node recovery
+  // Retrieves the last known state for a failed agent to allow for recovery.
   rpc GetStateReconstitution(HandshakeRequest) returns (AgentAction);
 
-  // Synthesize parallel agent outputs (AdaptOrch)
+  // Merges and synthesizes outputs from multiple agents.
   rpc SynthesizeOutputs(SynthesisRequest) returns (SynthesisResponse);
 
-  // Phase 8: Hardware-Aware Inference
+  // Executes a hardware-aware inference request.
   rpc GenerateResponse(InferenceRequest) returns (InferenceResponse);
 
-  // Audit & Performance Stats
+  // Retrieves performance and audit statistics for the mesh.
   rpc GetMeshStats(StatsRequest) returns (MeshStats);
 }
+
+// --- Auditing & Statistics ---
 
 message StatsRequest {}
 
@@ -158,6 +144,8 @@ message InfluenceMap {
   map<string, double> influence = 1;
 }
 
+// --- Search Protocol ---
+
 message SearchRequest {
   string agent_id = 1;
   string query = 2;
@@ -166,11 +154,11 @@ message SearchRequest {
 
 message SearchResponse {
   repeated SearchResult results = 1;
-  string reasoning_context = 2; // Contextual relevance from research
+  string reasoning_context = 2; 
 }
 
 message SearchResult {
-  string source = 3; // e.g. "Research Paper", "Student-A Log"
+  string source = 3; // The origin of the search result (e.g., a paper title).
   string content = 4;
   float score = 5;
 }
