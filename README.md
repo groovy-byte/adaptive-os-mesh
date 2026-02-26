@@ -71,6 +71,26 @@ go test ./internal/quantx/... -v
 npm test  # For integrity and dashboard tests
 ```
 
+### Usage
+
+1.  **Start the NATS Server**:
+    The mesh controller requires a NATS server for operational messaging.
+    ```bash
+    nats-server -p 4222
+    ```
+
+2.  **Run the Vextra Controller**:
+    In a separate terminal, start the main controller.
+    ```bash
+    go run ./cmd/vextra
+    ```
+
+3.  **Launch the TUI**:
+    To monitor the mesh in real-time, run the TUI.
+    ```bash
+    go run ./cmd/vextra_tui
+    ```
+
 ## License
 
 Apache-2.0

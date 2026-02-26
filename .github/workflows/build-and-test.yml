@@ -1,0 +1,71 @@
+name: Build, Test, and Release
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types: [created]
+
+jobs:
+  build_and_test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.0'
+
+      - name: Build Vextra Controller
+        run: go build -v -o vextra ./cmd/vextra
+
+      - name: Run Go Tests
+        run: go test -v ./...
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node.js dependencies
+        run: npm install
+
+      - name: Run Node.js Tests
+        run: npm test
+
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build_and_test
+    if: github.event_name == 'release'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.0'
+      
+      - name: Build Binaries
+        run: |
+          go build -o vextra ./cmd/vextra
+          go build -o vextra_tui ./cmd/vextra_tui
+          go build -o hardware_report ./cmd/hardware_report
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            vextra
+            vextra_tui
+            hardware_report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
